@@ -7,9 +7,9 @@ const PersonalSchema = new mongoose.Schema({
     bio: String,
     avatar_url: String,
     techs: [String],
-    lacation: {
+    location: {
         type: PointSchema,
-        indexes: '2dsphere'
+        index: '2dsphere'
     }
 });
 

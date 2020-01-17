@@ -4,7 +4,7 @@ const SearchController = require('./controllers/SearchController')
 
 const routes = Router( );
 
-routes.get('/search', PersonalController.index);
+routes.get('/search', SearchController.index);
 routes.get('/personals', PersonalController.index);
 routes.post('/personals', PersonalController.store);
 
