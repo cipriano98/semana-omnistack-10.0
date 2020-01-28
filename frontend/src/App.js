@@ -1,64 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import './services/Api';
 
-import './global.css';
-import './app.css';
-import './sidebar.css';
-
-import Header from './Header';
-
-
+import './Global.css';
+import './App.css';
+import './Sidebar.css';
+import './Main.css';
+import api from './services/Api';
+import PersonalItem from './components/PersonalItem';
+import PersonalForm from './components/PersonalForm';
 
 function App() {
+
+  const [personals, setPersonals] = useState([]);
+
+  useEffect(() => {
+
+    async function loadPersonals(params) {
+      const response = await api.get('/personals');
+      setPersonals(response.data)
+    }
+
+    loadPersonals();
+
+  })
+
+  async function handleAddPersonal(data) {
+
+    const response = await api.post('/personals', data)
+
+    setPersonals([...personals, response.data]);
+
+  }
+  
   return (
     <>
       <div id="app">
         <aside>
           <strong>Cadastrar</strong>
-            <form >
-
-                <div className="input-block">
-                  <label htmlFor="github_username">Usuário do github</label>
-                  <input name="github_username" type="text" id="github_username" required/>
-                </div>
-
-                <div className="input-block">
-                  <label htmlFor="techs">Tecnologias</label>
-                  <input name="techs" type="text" id="techs" required/>
-                </div>
-
-               <div className="input-group">
-
-                <div className="input-bolck">
-                    <label htmlFor="longitude">Longitude</label>
-                    <input name="longitude" type="text" id="longitude" required/>
-                </div>
-
-                  <div className="input-bolck">
-                    <label htmlFor="latitude">Latitude</label>
-                    <input name="latitude" type="text" id="latitude" required/>
-                  </div>
-
-               </div>
-
-               <button type="submit">Salvar</button>
-
-               <ul>
-                 <li className="personal-item">
-                    <header>
-                      <img src="teste" alt="Diego Fernandes"/>
-                      <div className="user-info">  {/* 1h */}
-
-                      </div>
-                    </header>
-                 </li>
-               </ul>
-
-
-
-            </form>
+          <PersonalForm onSubmit={handleAddPersonal} />
         </aside>
         <main>
-
+          <ul>
+            {personals.map(personal => (
+              <PersonalItem key={personal._id} personal={personal}/>
+            ))}
+          </ul> 
         </main>
       </div>
     </>
